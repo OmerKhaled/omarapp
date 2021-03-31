@@ -1,0 +1,100 @@
+@extends("layouts.dashboard.main")
+
+
+
+@section("content")
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{Route("dashboard")}}">Dashboard</a></li>
+            <li class="breadcrumb-item active"><a href="{{Route('category.index')}}">categories</a></li>
+            <li class="breadcrumb-item active">create</li>
+
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">categories Table</h3>
+                </div>  
+                <!-- /.card-header -->
+
+                <div class="card-body">
+                    <a href="{{Route('category.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Create New category</a>
+
+                  <table style="margin-top:10px;"class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Category Name</th>
+                        <th>Action</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                
+
+                      @foreach ($categories as $category)
+                        <tr>
+                            <td>{{$category->id}}</td>
+                            <td>{{$category->name}}</td>
+
+                            <td>
+                              @if(Auth::user()->hasPermission('categories_update'))
+        
+                                <a href="#" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                              @else
+                              <button class="btn btn-sm" disabled><i class="fas fa-user-edit"></i></button>
+                              @endif
+                              @if(Auth::user()->hasPermission('categories_delete'))
+                              <form action="/dashboard/category/{{$category->id}}" method="POST">
+                                @csrf
+                                @method("delete")
+                                <button type="submit "class="btn btn-danger btn-sm"><i class="fas fa-user-minus"></i></button>
+                              </form>
+                              @else
+                              <button class="btn btn-sm" disabled><i class="fas fa-user-minus"></i></button>
+                              @endif
+                            </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                    
+                  </table>
+                  <br/>
+                  {{$categories->links()}}
+
+                </div>
+                <!-- /.card-body -->
+                {{-- <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                  </ul>
+                </div> --}}
+              </div>
+
+        </div>
+
+          </div>
+    </div>
+
+  </section>
+  <!-- Main Content  Start -->
+
+
+
+@endsection
